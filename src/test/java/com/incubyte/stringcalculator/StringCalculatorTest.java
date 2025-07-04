@@ -41,9 +41,7 @@ public class StringCalculatorTest {
         assertEquals(210,result);
     }
 
-    // --- Step - 3 (Handle new lines between string) ---
 
-    //for numbers string with new lines in it - returns sum of numbers
 
 
 }
