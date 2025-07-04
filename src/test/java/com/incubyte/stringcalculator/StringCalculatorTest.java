@@ -41,6 +41,23 @@ public class StringCalculatorTest {
         assertEquals(210,result);
     }
 
+    // --- Step - 3 (Handle new lines between string) ---
+
+    //for numbers string having only new lines - returns sum of numbers ignores new line
+    @Test
+    void add_Numbers_With_Only_Newlines_Returns_Sum(){
+        StringCalculator calculator = new StringCalculator();
+        int result = calculator.add("4\n5\n6");
+        assertEquals(15,result);
+    }
+
+    //for numbers string with comma and new line in it - returns sum of numbers ignores new lines and comma
+    @Test
+    void add_Numbers_with_Newline_and_Comma_Returns_Sum(){
+        StringCalculator calculator = new StringCalculator();
+        int result = calculator.add("1\n2,3\n4,5");
+        assertEquals(15,result);
+    }
 
 
 

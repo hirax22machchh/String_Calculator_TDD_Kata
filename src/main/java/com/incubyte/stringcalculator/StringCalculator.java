@@ -9,8 +9,8 @@ public class StringCalculator {
             return 0;
         }
 
-        //splitting the numbers from comma(,)
-        String[] parts = numbers.split(",");
+        //splitting the numbers from comma(,) and new_line(\n)
+        String[] parts = numbers.split("[,\n]");
         int sum = 0;
 
         //after split if there is some white space around numbers, then this removes it, and does the sum of the numbers
