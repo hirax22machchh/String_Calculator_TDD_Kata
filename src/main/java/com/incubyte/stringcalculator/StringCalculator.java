@@ -29,13 +29,16 @@ public class StringCalculator {
 
         //checks if custom delimiter is there in a string or not
         if (numbers.startsWith("//")) {
-            int delimiterEnd = numbers.indexOf('\n');
-            String delimiterLine = numbers.substring(2, delimiterEnd);
+            int delimiterEnd = numbers.indexOf('\n');        //finds delimiter ending index
+            String delimiterLine = numbers.substring(2, delimiterEnd);    //make substring if delimiter except newline and "//"
             numbers = numbers.substring(delimiterEnd + 1); // actual number string
 
+            //checks if there is multiple delimiter
             if(delimiterLine.startsWith("[") && delimiterLine.endsWith("]")){
-                Matcher matcher = Pattern.compile("\\[(.*?)]").matcher(delimiterLine);
-                StringBuilder regex = new StringBuilder();
+                Matcher matcher = Pattern.compile("\\[(.*?)]").matcher(delimiterLine);  //makes pattern for fetching delimiters
+                StringBuilder regex = new StringBuilder();    //declaring regular expression
+
+                //finds multiple delimiter and stores it to regex
                 regex.append("(");
                 boolean first = true;
                 while(matcher.find()){

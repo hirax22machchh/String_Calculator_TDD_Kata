@@ -111,4 +111,12 @@ public class StringCalculatorTest {
         assertEquals(6,result);
     }
 
+    //for handling of multiple delimiters - returns sum of numbers
+    @Test
+    void add_Numbers_With_Allowing_Multiple_Delimiters(){
+        StringCalculator calculator = new StringCalculator();
+        int result = calculator.add("//[*][%]\n1*2%3");
+        assertEquals(6, result);
+    }
+
 }
