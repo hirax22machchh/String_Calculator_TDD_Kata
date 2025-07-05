@@ -53,10 +53,21 @@ public class StringCalculatorTest {
 
     //for numbers string with comma and new line in it - returns sum of numbers ignores new lines and comma
     @Test
-    void add_Numbers_with_Newline_and_Comma_Returns_Sum(){
+    void add_Numbers_with_Newline_And_Comma_Returns_Sum(){
         StringCalculator calculator = new StringCalculator();
         int result = calculator.add("1\n2,3\n4,5");
         assertEquals(15,result);
+    }
+
+    // --- Step - 4 (Handle different delimiters) ---
+
+    //for numbers string with diff delimiters, comma, and newline - returns sum of numbers
+    @Test
+    void add_Numbers_With_Custom_Delimiter_Comma_And_Newline(){
+        StringCalculator calculator = new StringCalculator();
+        int result = calculator.add("//;\n1;2");
+        assertEquals(3,result);
+        System.out.println("The result is"+result);
     }
 
 
