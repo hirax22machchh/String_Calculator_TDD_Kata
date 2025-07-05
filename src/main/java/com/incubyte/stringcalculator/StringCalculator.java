@@ -53,8 +53,9 @@ public class StringCalculator {
             if(number<0)
             {
                 negatives.add(number);
+            } else if(number <= 1000) {
+                sum += number;
             }
-            sum += number;
         }
 
         //if negative numbers are present in list then this part throws exception.

@@ -76,10 +76,7 @@ public class StringCalculatorTest {
     @Test
     void add_Numbers_With_NegativeNumber_ThrowsException_With_Message(){
         StringCalculator calculator = new StringCalculator();
-        RuntimeException exception = assertThrows(RuntimeException.class,
-                () -> {
-            calculator.add("1,-2,3,-4,-5");
-        });
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> calculator.add("1,-2,3,-4,-5"));
         assertEquals("negatives not allowed: [-2, -4, -5]",exception.getMessage());
     }
 
@@ -92,4 +89,14 @@ public class StringCalculatorTest {
         calculator.add("1,2,3");
         assertEquals(2,calculator.GetCalledCount());
     }
+
+    // --- Step - 9 (Numbers greater than 1000 should be ignored) ---
+
+    @Test
+    void add_Numbers_Greater_Than_1000_Are_Ignored(){
+        StringCalculator calculator = new StringCalculator();
+        int result = calculator.add("1,1000,1002,2000,2");
+        assertEquals(1003,result);
+    }
+
 }
