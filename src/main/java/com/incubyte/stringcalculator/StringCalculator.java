@@ -7,10 +7,10 @@ import java.util.regex.Pattern;
 
 public class StringCalculator {
 
-    //keeps count of how many times add method was called.
+    //keeps count of how many times add methods were called.
     private int callCount = 0;
 
-    public int GetCalledCount(){
+    public int getCalledCount(){
         return callCount;
     }
 
@@ -49,7 +49,7 @@ public class StringCalculator {
                 regex.append(")");
                 delimiter = regex.toString();
             } else {
-                delimiter = "[.\n" + Pattern.quote(delimiterLine) + "]";    // Adding collected delimiters
+                delimiter = "[,\n" + Pattern.quote(delimiterLine) + "]";    // Adding collected delimiters
             }
 
         }

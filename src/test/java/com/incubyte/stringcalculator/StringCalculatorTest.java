@@ -88,7 +88,7 @@ public class StringCalculatorTest {
         StringCalculator calculator = new StringCalculator();
         calculator.add("1,2");
         calculator.add("1,2,3");
-        assertEquals(2,calculator.GetCalledCount());
+        assertEquals(2,calculator.getCalledCount());
     }
 
     // --- Step - 9 (Numbers greater than 1000 should be ignored) ---
