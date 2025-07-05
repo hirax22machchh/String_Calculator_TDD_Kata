@@ -2,6 +2,7 @@ package com.incubyte.stringcalculator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class StringCalculator {
@@ -30,8 +31,24 @@ public class StringCalculator {
         if (numbers.startsWith("//")) {
             int delimiterEnd = numbers.indexOf('\n');
             String delimiterLine = numbers.substring(2, delimiterEnd);
-            delimiter = "[\n," + Pattern.quote(delimiterLine) + "]";// escape any regex characters
             numbers = numbers.substring(delimiterEnd + 1); // actual number string
+
+            if(delimiterLine.startsWith("[") && delimiterLine.endsWith("]")){
+                Matcher matcher = Pattern.compile("\\[(.*?)]").matcher(delimiterLine);
+                StringBuilder regex = new StringBuilder();
+                regex.append("(");
+                boolean first = true;
+                while(matcher.find()){
+                    if(!first) regex.append("|");
+                    regex.append(Pattern.quote(matcher.group(1)));
+                    first = false;
+                }
+                regex.append(")");
+                delimiter = regex.toString();
+            } else {
+                delimiter = "[.\n" + Pattern.quote(delimiterLine) + "]";
+            }
+
         }
 
         int sum = 0;

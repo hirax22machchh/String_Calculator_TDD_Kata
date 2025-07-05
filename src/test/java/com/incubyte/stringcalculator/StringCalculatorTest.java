@@ -82,6 +82,7 @@ public class StringCalculatorTest {
 
     // --- Step-7 (For checking method GetCalledCount) ---
 
+    //for counting of Add method calls - returns count of Add method calls
     @Test
     void getCalledCount_Returns_CountOf_Add_Method_Calls(){
         StringCalculator calculator = new StringCalculator();
@@ -92,11 +93,22 @@ public class StringCalculatorTest {
 
     // --- Step - 9 (Numbers greater than 1000 should be ignored) ---
 
+    //for numbers greater than 1000 are ignored - returns sum with ignoring of numbers greater than 1000
     @Test
     void add_Numbers_Greater_Than_1000_Are_Ignored(){
         StringCalculator calculator = new StringCalculator();
         int result = calculator.add("1,1000,1002,2000,2");
         assertEquals(1003,result);
+    }
+
+    // Step - 10 (Handling delimiters of any length) ---
+
+    //for delimiters having any length - returns sum of numbers
+    @Test
+    void add_Numbers_With_Delimiters_Of_Any_Length(){
+        StringCalculator calculator = new StringCalculator();
+        int result = calculator.add("//[***]\n1***2***3");
+        assertEquals(6,result);
     }
 
 }
