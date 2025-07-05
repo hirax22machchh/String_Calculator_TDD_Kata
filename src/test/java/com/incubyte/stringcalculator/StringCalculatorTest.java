@@ -70,6 +70,17 @@ public class StringCalculatorTest {
         System.out.println("The result is"+result);
     }
 
+    // --- Step - 5 & 6 (Handle negative numbers with exception) ---
 
+    //for numbers string with negative numbers - returns exception with negative values
+    @Test
+    void add_Numbers_With_NegativeNumber_ThrowsException_With_Message(){
+        StringCalculator calculator = new StringCalculator();
+        RuntimeException exception = assertThrows(RuntimeException.class,
+                () -> {
+            calculator.add("1,-2,3,-4,-5");
+        });
+        assertEquals("negatives not allowed: [-2, -4, -5]",exception.getMessage());
+    }
 
 }
