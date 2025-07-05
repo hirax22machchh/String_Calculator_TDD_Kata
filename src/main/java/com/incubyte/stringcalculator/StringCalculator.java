@@ -49,7 +49,7 @@ public class StringCalculator {
                 regex.append(")");
                 delimiter = regex.toString();
             } else {
-                delimiter = "[.\n" + Pattern.quote(delimiterLine) + "]";
+                delimiter = "[.\n" + Pattern.quote(delimiterLine) + "]";    // Adding collected delimiters
             }
 
         }
