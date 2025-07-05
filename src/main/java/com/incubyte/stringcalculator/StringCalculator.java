@@ -5,7 +5,17 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class StringCalculator {
+
+    //keeps count of how many times add method was called.
+    private int callCount = 0;
+
+    public int GetCalledCount(){
+        return callCount;
+    }
+
     public int add(String numbers){
+
+        callCount++;  //incrementing call count of add method.
 
         //checks if string of numbers is null or empty if it is, then it return 0
         if(numbers == null || numbers.isEmpty())
@@ -23,12 +33,20 @@ public class StringCalculator {
             delimiter = "[\n," + Pattern.quote(delimiterLine) + "]";// escape any regex characters
             numbers = numbers.substring(delimiterEnd + 1); // actual number string
         }
-        //splitting the numbers from comma(,) and new_line(\n)
-        String[] parts = numbers.split(delimiter);
+
         int sum = 0;
         List<Integer> negatives = new ArrayList<>();
 
-        //after split if there is some white space around numbers, then this removes it, and does the sum of the numbers
+        //splitting the numbers from delimiters
+        String[] parts = numbers.split(delimiter);
+
+        /*
+         * This part removes extra white space from numbers,
+         * And converts string to integer.
+         * After that in if condition it checks for negative numbers,
+         * If negative numbers are present then stores into array list.
+         * And for positive numbers it adds to sum.
+         */
         for(String part : parts)
         {
             int number = Integer.parseInt(part.trim());
@@ -39,6 +57,7 @@ public class StringCalculator {
             sum += number;
         }
 
+        //if negative numbers are present in list then this part throws exception.
         if(!negatives.isEmpty())
         {
             throw new RuntimeException("negatives not allowed: "+negatives);

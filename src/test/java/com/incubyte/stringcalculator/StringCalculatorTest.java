@@ -83,4 +83,13 @@ public class StringCalculatorTest {
         assertEquals("negatives not allowed: [-2, -4, -5]",exception.getMessage());
     }
 
+    // --- Step-7 (For checking method GetCalledCount) ---
+
+    @Test
+    void getCalledCount_Returns_CountOf_Add_Method_Calls(){
+        StringCalculator calculator = new StringCalculator();
+        calculator.add("1,2");
+        calculator.add("1,2,3");
+        assertEquals(2,calculator.GetCalledCount());
+    }
 }
