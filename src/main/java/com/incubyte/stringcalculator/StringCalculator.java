@@ -7,83 +7,97 @@ import java.util.regex.Pattern;
 
 public class StringCalculator {
 
-    //keeps count of how many times add methods were called.
     private int callCount = 0;
 
-    public int getCalledCount(){
+    public int getCalledCount() {
         return callCount;
     }
 
-    public int add(String numbers){
+    public int add(String numbers) {
+        callCount++;
 
-        callCount++;  //incrementing call count of add method.
-
-        //checks if string of numbers is null or empty if it is, then it return 0
-        if(numbers == null || numbers.isEmpty())
-        {
+        if (isNullOrEmpty(numbers)) {
             return 0;
         }
 
-        //this string contains the delimiter regular expression
-        String delimiter = "[,\n]";
+        String delimiter = getDelimiter(numbers);
+        numbers = removeDelimiterDeclaration(numbers);
 
-        //checks if custom delimiter is there in a string or not
-        if (numbers.startsWith("//")) {
-            int delimiterEnd = numbers.indexOf('\n');        //finds delimiter ending index
-            String delimiterLine = numbers.substring(2, delimiterEnd);    //make substring if delimiter except newline and "//"
-            numbers = numbers.substring(delimiterEnd + 1); // actual number string
+        String[] parts = numbers.split(delimiter);
+        List<Integer> negatives = new ArrayList<>();
+        int sum = calculateSum(parts, negatives);
 
-            //checks if there is multiple delimiter
-            if(delimiterLine.startsWith("[") && delimiterLine.endsWith("]")){
-                Matcher matcher = Pattern.compile("\\[(.*?)]").matcher(delimiterLine);  //makes pattern for fetching delimiters
-                StringBuilder regex = new StringBuilder();    //declaring regular expression
-
-                //finds multiple delimiter and stores it to regex
-                regex.append("(");
-                boolean first = true;
-                while(matcher.find()){
-                    if(!first) regex.append("|");
-                    regex.append(Pattern.quote(matcher.group(1)));
-                    first = false;
-                }
-                regex.append(")");
-                delimiter = regex.toString();
-            } else {
-                delimiter = "[,\n" + Pattern.quote(delimiterLine) + "]";    // Adding collected delimiters
-            }
-
+        if (!negatives.isEmpty()) {
+            throw new RuntimeException("negatives not allowed: " + negatives);
         }
 
+        return sum;
+    }
+
+    // --- Helper Methods ---
+
+    // Checks if the input string is null or empty
+    private boolean isNullOrEmpty(String input) {
+        return input == null || input.isEmpty();
+    }
+
+    // Returns a string of delimiters if it is there otherwise returns default delimiters
+    private String getDelimiter(String input) {
+        String defaultDelimiters = "[,\n]";
+
+        // if there are no delimiters specified, then returns default delimiters.
+        if (!input.startsWith("//")) {
+            return defaultDelimiters;
+        }
+
+        //create delimiterLine string which contains unknown delimiters
+        int delimiterEnd = input.indexOf('\n');
+        String delimiterLine = input.substring(2, delimiterEnd);
+
+        //extract multiple delimiters from delimiterLine
+        if (delimiterLine.startsWith("[") && delimiterLine.endsWith("]")) {
+            return buildMultipleDelimiterRegex(delimiterLine);
+        } else {
+            return "[,\n" + Pattern.quote(delimiterLine) + "]";
+        }
+    }
+
+    // Removes delimiters declaration from main String and returns input string
+    private String removeDelimiterDeclaration(String input) {
+        if (input.startsWith("//")) {
+            int delimiterEnd = input.indexOf('\n');
+            return input.substring(delimiterEnd + 1);
+        }
+        return input;
+    }
+
+    // builds regular expression for delimiter extraction
+    private String buildMultipleDelimiterRegex(String delimiterLine) {
+        Matcher matcher = Pattern.compile("\\[(.*?)]").matcher(delimiterLine);
+        StringBuilder regex = new StringBuilder("(");
+        boolean first = true;
+
+        while (matcher.find()) {
+            if (!first) regex.append("|");
+            regex.append(Pattern.quote(matcher.group(1)));
+            first = false;
+        }
+
+        regex.append(")");
+        return regex.toString();
+    }
+
+    //calculates sum
+    private int calculateSum(String[] parts, List<Integer> negatives) {
         int sum = 0;
-        List<Integer> negatives = new ArrayList<>();
-
-        //splitting the numbers from delimiters
-        String[] parts = numbers.split(delimiter);
-
-        /*
-         * This part removes extra white space from numbers,
-         * And converts string to integer.
-         * After that in if condition it checks for negative numbers,
-         * If negative numbers are present then stores into array list.
-         * And for positive numbers it adds to sum.
-         */
-        for(String part : parts)
-        {
+        for (String part : parts) {
             int number = Integer.parseInt(part.trim());
-            if(number<0)
-            {
+            if (number < 0) {
                 negatives.add(number);
-            } else if(number <= 1000) {
+            } else if (number <= 1000) {
                 sum += number;
             }
         }
-
-        //if negative numbers are present in list then this part throws exception.
-        if(!negatives.isEmpty())
-        {
-            throw new RuntimeException("negatives not allowed: "+negatives);
-        }
-
         return sum;
     }
 }
