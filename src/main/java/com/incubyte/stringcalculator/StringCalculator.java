@@ -7,31 +7,33 @@ import java.util.regex.Pattern;
 
 public class StringCalculator {
 
+    // Keeps count of how many times the add method was called
     private int callCount = 0;
 
+    // Returns how many times add() method has been invoked
     public int getCalledCount() {
         return callCount;
     }
 
+    // Main method to add numbers from the string input
     public int add(String numbers) {
         callCount++;
 
+        // Check if the input string is null or empty
         if (isNullOrEmpty(numbers)) {
             return 0;
         }
 
+        // Get the delimiter regex (custom or default)
         String delimiter = getDelimiter(numbers);
-        numbers = removeDelimiterDeclaration(numbers);
 
-        String[] parts = numbers.split(delimiter);
-        List<Integer> negatives = new ArrayList<>();
-        int sum = calculateSum(parts, negatives);
+        // Remove the delimiter declaration line from the input
+        String cleanedInput = removeDelimiterDeclaration(numbers);
 
-        if (!negatives.isEmpty()) {
-            throw new RuntimeException("negatives not allowed: " + negatives);
-        }
+        // Split the string into number parts using the delimiter regex
+        String[] parts = cleanedInput.split(delimiter);
 
-        return sum;
+        return calculateSum(parts);
     }
 
     // --- Helper Methods ---
@@ -41,28 +43,29 @@ public class StringCalculator {
         return input == null || input.isEmpty();
     }
 
-    // Returns a string of delimiters if it is there otherwise returns default delimiters
+    // Returns a string containing the delimiter regex
     private String getDelimiter(String input) {
         String defaultDelimiters = "[,\n]";
 
-        // if there are no delimiters specified, then returns default delimiters.
+        // If no custom delimiter is specified, return default
         if (!input.startsWith("//")) {
             return defaultDelimiters;
         }
 
-        //create delimiterLine string which contains unknown delimiters
+        // Extract the custom delimiter declaration
         int delimiterEnd = input.indexOf('\n');
         String delimiterLine = input.substring(2, delimiterEnd);
 
-        //extract multiple delimiters from delimiterLine
+        // If multiple delimiters are declared (with square brackets)
         if (delimiterLine.startsWith("[") && delimiterLine.endsWith("]")) {
             return buildMultipleDelimiterRegex(delimiterLine);
         } else {
+            // Single custom delimiter
             return "[,\n" + Pattern.quote(delimiterLine) + "]";
         }
     }
 
-    // Removes delimiters declaration from main String and returns input string
+    // Removes the custom delimiter declaration part from the input
     private String removeDelimiterDeclaration(String input) {
         if (input.startsWith("//")) {
             int delimiterEnd = input.indexOf('\n');
@@ -71,12 +74,13 @@ public class StringCalculator {
         return input;
     }
 
-    // builds regular expression for delimiter extraction
+    // Builds the regex for splitting on multiple delimiters
     private String buildMultipleDelimiterRegex(String delimiterLine) {
         Matcher matcher = Pattern.compile("\\[(.*?)]").matcher(delimiterLine);
         StringBuilder regex = new StringBuilder("(");
         boolean first = true;
 
+        // Loop through all delimiters enclosed in []
         while (matcher.find()) {
             if (!first) regex.append("|");
             regex.append(Pattern.quote(matcher.group(1)));
@@ -87,17 +91,29 @@ public class StringCalculator {
         return regex.toString();
     }
 
-    //calculates sum
-    private int calculateSum(String[] parts, List<Integer> negatives) {
+    // Calculates the sum of numbers; throws exception for negatives
+    private int calculateSum(String[] parts) {
         int sum = 0;
+        List<Integer> negatives = new ArrayList<>();
+
         for (String part : parts) {
             int number = Integer.parseInt(part.trim());
+
+            // Collect negative numbers for exception
             if (number < 0) {
                 negatives.add(number);
-            } else if (number <= 1000) {
+            }
+            // Ignore numbers greater than 1000
+            else if (number <= 1000) {
                 sum += number;
             }
         }
+
+        // If any negatives found, throw custom exception
+        if (!negatives.isEmpty()) {
+            throw new NegativeNumberException(negatives);
+        }
+
         return sum;
     }
 }
